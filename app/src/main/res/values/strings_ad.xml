@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_type_text">Select Ad Type:</string>
+    <string name="ad_id_text">Ad ID:</string>
+    <string name="ad_title_text">Ad Title:</string>
+    <string name="ad_title_hint">Enter Ad Title Here...</string>
+    <string name="ad_priority_text">Select Ad Priority:</string>
+    <string name="ad_desc_text">Ad Description:</string>
+    <string name="ad_from_date_text">From Date:</string>
+    <string name="ad_to_date_text">To Date:</string>
+    <string name="edit_ad_item_text">Edit</string>
+    <string name="delete_ad_item_text">Delete</string>
+    <string-array name="ad_types">
+        <item>General</item>
+        <item>Event</item>
+    </string-array>
+    <string-array name="ad_priorities">
+        <item>Low</item>
+        <item>High</item>
+    </string-array>
+</resources>

@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Welcome"
+    >
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add ad"
+        android:id="@+id/btn_add_ad"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="96dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CreateBoard"
+        android:id="@+id/btnCreate"
+        android:layout_above="@+id/btn_add_ad"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="151dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Test"
+        android:layout_above="@+id/btn_add_ad"
+        android:layout_alignLeft="@+id/btnCreate"
+        android:layout_alignStart="@+id/btnCreate"
+        android:layout_marginBottom="68dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MyBoards"
+        android:id="@+id/myBoards"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/Test"
+        android:layout_alignStart="@+id/Test" />
+</RelativeLayout>

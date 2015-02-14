@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:context="finalproject.shareboard.AdActivity">
+    <item android:id="@+id/itmEditAd" android:title="@string/edit_ad_item_text"
+        android:icon="@drawable/edit_ad" android:showAsAction="always"
+        tools:ignore="AppCompatResource" android:visible="false">
+    </item>
+    <item android:id="@+id/itmDeleteAd" android:title="@string/delete_ad_item_text"
+        android:icon="@drawable/delete_ad" android:showAsAction="always"
+        tools:ignore="AppCompatResource" android:visible="false">
+    </item>
+</menu>

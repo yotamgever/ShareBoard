@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menuMyBoard">
+    <item android:id="@+id/itmAddNewAd" android:title="@string/menu_item_add_ad_text"
+       android:icon="@drawable/add_ad" android:showAsAction="always"
+        tools:ignore="AppCompatResource">
+    </item>
+</menu>

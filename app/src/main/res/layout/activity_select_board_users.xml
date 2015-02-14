@@ -1,0 +1,264 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="finalproject.shareboard.SelectBoardUsersActivity">
+
+    <TextView android:id="@+id/tvBoardName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_board_select_users_title_text"
+        />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBoardName"
+        android:id="@+id/flAddContact">
+        <Button
+            android:id="@+id/addContact1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_contact_button_text"
+            />
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llAddContact1"
+        android:orientation="horizontal"
+        android:layout_below="@+id/tvBoardName"
+        android:visibility="invisible">
+
+        <TextView android:id="@+id/tvContact1Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <TextView android:id="@+id/tvContact1Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <Spinner android:id="@+id/spContact1Auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/user_auth_types"
+            ></Spinner>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llAddContact1">
+        <Button
+            android:id="@+id/addContact2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_contact_button_text"
+            android:visibility="invisible"
+            />
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llAddContact2"
+        android:orientation="horizontal"
+        android:layout_below="@+id/llAddContact1"
+        android:visibility="invisible">
+
+        <TextView android:id="@+id/tvContact2Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <TextView android:id="@+id/tvContact2Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <Spinner android:id="@+id/spContact2Auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/user_auth_types"
+            ></Spinner>
+    </LinearLayout>
+
+    <FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/llAddContact2">
+    <Button
+        android:id="@+id/addContact3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_contact_button_text"
+        android:visibility="invisible"
+        />
+</FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llAddContact3"
+        android:orientation="horizontal"
+        android:layout_below="@+id/llAddContact2"
+        android:visibility="invisible">
+
+        <TextView android:id="@+id/tvContact3Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <TextView android:id="@+id/tvContact3Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <Spinner android:id="@+id/spContact3Auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/user_auth_types"
+            ></Spinner>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llAddContact3">
+        <Button
+            android:id="@+id/addContact4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_contact_button_text"
+            android:visibility="invisible"
+            />
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llAddContact4"
+        android:orientation="horizontal"
+        android:layout_below="@+id/llAddContact3"
+        android:visibility="invisible">
+
+        <TextView android:id="@+id/tvContact4Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <TextView android:id="@+id/tvContact4Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <Spinner android:id="@+id/spContact4Auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/user_auth_types"
+            ></Spinner>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llAddContact4">
+        <Button
+            android:id="@+id/addContact5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_contact_button_text"
+            android:visibility="invisible"
+            />
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llAddContact5"
+        android:orientation="horizontal"
+        android:layout_below="@+id/llAddContact4"
+        android:visibility="invisible">
+
+        <TextView android:id="@+id/tvContact5Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <TextView android:id="@+id/tvContact5Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <Spinner android:id="@+id/spContact5Auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/user_auth_types"
+            ></Spinner>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llAddContact5">
+        <Button
+            android:id="@+id/addContact6"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_contact_button_text"
+            android:visibility="invisible"
+            />
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llAddContact6"
+        android:orientation="horizontal"
+        android:layout_below="@+id/llAddContact5"
+        android:visibility="invisible">
+
+        <TextView android:id="@+id/tvContact6Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <TextView android:id="@+id/tvContact6Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="4"
+            />
+        <Spinner android:id="@+id/spContact6Auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/user_auth_types"
+            ></Spinner>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llAddContact6"
+        android:id="@+id/llMaxUsersPerBoardText"
+        android:visibility="invisible">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/max_users_per_board_text"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="61dp"
+        android:id="@+id/rlCreateBoard"
+        android:layout_below="@id/flAddContact"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCreateBoard"
+            android:text="@string/create_board_text"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>

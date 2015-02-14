@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_activity_title">Main Menu</string>
+    <string name="register_user_text">Please enter your phone number:</string>
+    <string name="register_user_save_button">Save</string>
+</resources>

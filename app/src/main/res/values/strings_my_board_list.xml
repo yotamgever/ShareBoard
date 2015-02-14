@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="list_row_creator_text">Creator:</string>
+    <string name="list_row_board_id_text">Board ID:</string>
+    <string name="menu_item_add_ad_text">Add Ad</string>
+    <string name="empty_board_text">This ShareBoard Is Empty :(</string>
+</resources>

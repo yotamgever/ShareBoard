@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <!--  ListRow Left side ShareBoard type -->
+    <LinearLayout android:id="@+id/llBoardThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/image_bg"
+        android:layout_marginRight="5dip">
+
+        <ImageView
+            android:id="@+id/ivBoardImage"
+            android:layout_width="50dip"
+            android:layout_height="50dip"/>
+
+    </LinearLayout>
+
+    <!-- Name Of The ShareBoard -->
+    <TextView
+        android:id="@+id/tvRowBoardName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/llBoardThumbnail"
+        android:layout_toRightOf="@+id/llBoardThumbnail"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="15dip"
+        android:textStyle="bold"/>
+
+    <!-- Creator Name -->
+    <TextView
+        android:id="@+id/lstRowCreatorName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvRowBoardName"
+        android:textColor="#343434"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/llBoardThumbnail"
+        android:text="Creator: " />
+
+
+    <!-- Rightend Last Update -->
+    <TextView
+        android:id="@+id/lstRowBoardID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tvRowBoardName"
+        android:gravity="right"
+        android:text="@string/list_row_board_id_text"
+        android:layout_marginRight="5dip"
+        android:textSize="10dip"
+        android:textColor="#10bcc9"
+        android:textStyle="bold"/>
+
+    <!--  ListRow Right side Permission type -->
+    <LinearLayout android:id="@+id/llAuthThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/lstRowBoardID"
+        android:background="@drawable/image_bg"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5dip">
+
+        <ImageView
+            android:id="@+id/ivAuthImage"
+            android:layout_width="30dip"
+            android:layout_height="30dip"/>
+
+    </LinearLayout>
+</RelativeLayout>

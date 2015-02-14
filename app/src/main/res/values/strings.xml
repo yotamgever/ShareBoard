@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ShareBoard</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_ad">Ad</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="exit_application">Exit</string>
+
+
+
+
+    <string name="title_activity_create_board">CreateBoard</string>
+    <string name="title_activity_select_board_users">Select Board Users</string>
+    <string name="title_activity_my_board">MyBoardActivity</string>
+    <string name="title_activity_my_board_list">MyBoardList</string>
+
+</resources>

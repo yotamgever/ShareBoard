@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="finalproject.shareboard" >
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name="finalproject.shareboard.ShareBoardApplication"
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="finalproject.shareboard.MainMenuActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="finalproject.shareboard.AdActivity"
+            android:label="@string/title_activity_ad" >
+        </activity>
+        <activity
+            android:name="finalproject.shareboard.CreateBoardActivity"
+            android:label="@string/title_activity_create_board" >
+        </activity>
+        <activity
+            android:name="finalproject.shareboard.SelectBoardUsersActivity"
+            android:label="@string/title_activity_select_board_users" >
+        </activity>
+        <activity
+            android:name="finalproject.shareboard.MyBoardActivity"
+            android:label="@string/title_activity_my_board" >
+        </activity>
+        <activity
+            android:name=".MyBoardListActivity"
+            android:label="@string/title_activity_my_board_list" >
+        </activity>
+    </application>
+
+</manifest>
