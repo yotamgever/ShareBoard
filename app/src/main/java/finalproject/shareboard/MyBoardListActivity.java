@@ -1,13 +1,19 @@
 package finalproject.shareboard;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,17 +31,66 @@ import finalproject.shareboard.model.User;
 
 
 public class MyBoardListActivity extends ShareBoardActivity {
-
     ListView lstMyBoardsListView = null;
     ArrayList<Board> lstMyBoardsList = null;
     CustomAdapter boardsListAdapter;
+
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor prefEdit;
+
+    Dialog registerUserDialog;
+    Dialog adValidDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_board_list);
 
-        initializeComponents();
+        preferences =
+                getSharedPreferences("ShareBoard",MODE_PRIVATE);
+        prefEdit = preferences.edit();
+        prefEdit.clear().apply();
+        ((ShareBoardApplication)getApplication()).setUserID(preferences.getInt("UserID", 0));
+
+        if (((ShareBoardApplication)getApplication()).getUserID() == 0) {
+            initalizeRegisterUserDialog();
+        }
+    }
+
+    private void initalizeRegisterUserDialog() {
+        registerUserDialog = new Dialog(MyBoardListActivity.this);
+        registerUserDialog.setContentView(R.layout.register_user);
+        registerUserDialog.setTitle("Registration");
+
+        final EditText registerUserInput = (EditText) registerUserDialog.findViewById(R.id.etRegisterUser);
+        Button registerUserSaveButton = (Button) registerUserDialog.findViewById(R.id.btnRegisterUserSave);
+
+        AlertDialog.Builder adValidDialogBuilder = new AlertDialog.Builder(this);
+        adValidDialogBuilder.setMessage("Oops! Something went wrong... Please try correct your details or try again later")
+                .setCancelable(false)
+                .setNeutralButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        adValidDialog = adValidDialogBuilder.create();
+
+        registerUserSaveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Integer UserID = Integer.parseInt(registerUserInput.getText().toString());
+                registerNewUser(UserID);
+            }
+        });
+
+        registerUserDialog.setCancelable(false);
+        registerUserDialog.show();
+    }
+
+    private void registerNewUser(Integer NewUserID) {
+        dialog.show();
+        new insertNewUser(NewUserID).execute(new ApiConnector());
     }
 
     private void initializeComponents() {
@@ -68,7 +123,9 @@ public class MyBoardListActivity extends ShareBoardActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.add_new_board) {
+            Intent AddCreateActivity = new Intent(this, CreateBoardActivity.class);
+            startActivity(AddCreateActivity);
             return true;
         }
 
@@ -84,22 +141,25 @@ public class MyBoardListActivity extends ShareBoardActivity {
 
         @Override
         protected void onPostExecute(JSONArray userBoards) {
-            for (int boardIndex = 0; boardIndex < userBoards.length(); boardIndex++) {
-                JSONObject board = null;
-                try {
-                    board = userBoards.getJSONObject(boardIndex);
-                    Integer boardId = board.getInt("BoardID");
-                    String boardName = board.getString("BoardName");
-                    Globals.boardTypes boardType = Globals.boardTypes.fromOrdinal(board.getInt("BoardType"));
-                    User creator = new User(board.getInt("CreatorID"));
-                    Board boardToAdd = new Board(boardId, boardName, creator, boardType);
-                    Globals.userAuthType authType = Globals.userAuthType.fromOrdinal(board.getInt("PermissionCode"));
-                    boardToAdd.addUserToBoard(((ShareBoardApplication)getApplication()).getCurrUser(), authType);
-                    lstMyBoardsList.add(boardToAdd);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            if (userBoards != null) {
+                for (int boardIndex = 0; boardIndex < userBoards.length(); boardIndex++) {
+                    JSONObject board = null;
+                    try {
+                        board = userBoards.getJSONObject(boardIndex);
+                        Integer boardId = board.getInt("BoardID");
+                        String boardName = board.getString("BoardName");
+                        Globals.boardTypes boardType = Globals.boardTypes.fromOrdinal(board.getInt("BoardType"));
+                        User creator = new User(board.getInt("CreatorID"));
+                        Board boardToAdd = new Board(boardId, boardName, creator, boardType);
+                        Globals.userAuthType authType = Globals.userAuthType.fromOrdinal(board.getInt("PermissionCode"));
+                        boardToAdd.addUserToBoard(((ShareBoardApplication) getApplication()).getCurrUser(), authType);
+                        lstMyBoardsList.add(boardToAdd);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
             boardsListAdapter = new CustomAdapter(MyBoardListActivity.this, lstMyBoardsList);
             lstMyBoardsListView.setAdapter(boardsListAdapter);
 
@@ -119,6 +179,43 @@ public class MyBoardListActivity extends ShareBoardActivity {
             lstMyBoardsListView.setOnItemClickListener(boardClicked);
 
             dialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (((ShareBoardApplication)getApplication()).getUserID() != 0) {
+            initializeComponents();
+        }
+    }
+
+    private class insertNewUser extends AsyncTask<ApiConnector, Long, Integer> {
+        private Integer UserId;
+
+        protected insertNewUser(Integer UserIDToAdd) {
+            super();
+            UserId = UserIDToAdd;
+        }
+
+        @Override
+
+        protected Integer doInBackground(ApiConnector... apiConnectors) {
+            return apiConnectors[0].InsertUser(UserId);
+        }
+
+        @Override
+        protected void onPostExecute(Integer success) {
+            if (success != 0) {
+                ((ShareBoardApplication) getApplication()).setUserID(UserId);
+                prefEdit.putInt("UserID", UserId).apply();
+                registerUserDialog.dismiss();
+                dialog.dismiss();
+                initializeComponents();
+            } else {
+                dialog.dismiss();
+                adValidDialog.show();
+            }
         }
     }
 }

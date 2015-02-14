@@ -1,5 +1,8 @@
 package finalproject.shareboard;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +25,8 @@ public class CreateBoardActivity extends ShareBoardActivity {
 
     private Button btnCancel;
     private Button btnNext;
+
+    Dialog adValidDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +102,34 @@ public class CreateBoardActivity extends ShareBoardActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OpenSelectBoardUsersActivity();
-                finish();
+                if (checkBoardValid()) {
+                    OpenSelectBoardUsersActivity();
+                    finish();
+                } else {
+                    adValidDialog.show();
+                }
             }
         });
+
+        AlertDialog.Builder adValidDialogBuilder = new AlertDialog.Builder(this);
+        adValidDialogBuilder.setMessage("Oops! Something went wrong... Please try correct board details and try again")
+                .setCancelable(false)
+                .setNeutralButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        adValidDialog = adValidDialogBuilder.create();
+    }
+
+    private boolean checkBoardValid() {
+        if (etBoardName.getText().toString().length() == 0) {
+            return false;
+        }
+
+        return true;
     }
 
     private void OpenSelectBoardUsersActivity() {

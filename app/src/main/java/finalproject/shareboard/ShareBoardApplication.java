@@ -16,20 +16,18 @@ import finalproject.shareboard.model.User;
 
 public class ShareBoardApplication extends Application {
 
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor prefEdit;
 
-    private String UserID;
+
+    private Integer UserID;
     private User currUser;
 
-    public String getUserID() {
+    public Integer getUserID() {
         return UserID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(Integer userID) {
         UserID = userID;
-        prefEdit.putString("UserID", userID);
-        currUser = new User(Integer.valueOf(UserID));
+        currUser = new User(UserID);
     }
 
     public User getCurrUser() { return currUser; }
@@ -38,10 +36,7 @@ public class ShareBoardApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        preferences =
-            getSharedPreferences("ShareBoard",MODE_PRIVATE);
-        prefEdit = preferences.edit();
-        UserID = preferences.getString("UserID", "");
+
     }
 
 }

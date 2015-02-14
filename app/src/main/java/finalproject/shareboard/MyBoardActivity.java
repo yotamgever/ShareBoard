@@ -54,9 +54,6 @@ public class MyBoardActivity extends ShareBoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_board);
 
-
-
-
         InitializeComponents();
     }
 
@@ -83,6 +80,13 @@ public class MyBoardActivity extends ShareBoardActivity {
                 Intent adActivity = new Intent(MyBoardActivity.this, AdActivity.class);
                 Bundle AdDetails = new Bundle();
                 AdDetails.putInt("AdID", Integer.valueOf(view.getTag().toString()));
+                Ad wantedAd = getAdByID(Integer.valueOf(view.getTag().toString()));
+                AdDetails.putString("AdTitle", wantedAd.getAdTitle());
+                AdDetails.putInt("AdType", wantedAd.getAdType().ordinal());
+                AdDetails.putString("AdDesc", wantedAd.getAdDesc());
+                AdDetails.putInt("AdPriority", wantedAd.getAdPriority().ordinal());
+                AdDetails.putString("AdFromDate", wantedAd.getFromTime());
+                AdDetails.putString("AdToDate", wantedAd.getToTime());
                 AdDetails.putInt("UserAuth", currUserAuth.ordinal());
                 AdDetails.putInt("BoardID", boardID);
                 adActivity.putExtras(AdDetails);
@@ -90,19 +94,56 @@ public class MyBoardActivity extends ShareBoardActivity {
             }
         };
 
-        dialog.show();
-        loadBoardDetails(boardID);
+//        dialog.show();
+//        loadBoardDetails(boardID);
     }
 
     private void loadBoardDetails(Integer boardID) {
         new GetBoard().execute(new ApiConnector());
     }
 
+    private Ad getAdByID(Integer adID) {
+        Ad toReturn = null;
+        for (Ad curr : currBoardAds) {
+            if (curr.getAdId().compareTo(adID) == 0) {
+                toReturn = curr;
+                break;
+            }
+        }
+
+        return toReturn;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        for (Button btn : lstLargeNotes) {
+            btn.setVisibility(View.INVISIBLE);
+        }
+
+        for (Button btn : lstSmallNotes) {
+            btn.setVisibility(View.INVISIBLE);
+        }
+
+        currBoardAds.clear();
+        buttonAds.clear();
+        dialog.show();
+        loadBoardDetails(boardID);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_my_board, menu);
+
+        if (currUserAuth != null) {
+            if (Globals.userAuthType.Admin.compareTo(currUserAuth) == 0) {
+                menu.findItem(R.id.itmAddNewAd).setVisible(true);
+            } else {
+                menu.findItem(R.id.itmAddNewAd).setVisible(false);
+            }
+        }
+
         return true;
     }
 
@@ -143,6 +184,7 @@ public class MyBoardActivity extends ShareBoardActivity {
                     Globals.boardTypes boardType = Globals.boardTypes.fromOrdinal(board.getInt("BoardType"));
                     User creator = new User(board.getInt("CreatorID"));
                     currBoard = new Board(boardID, boardName, creator, boardType);
+                    MyBoardActivity.this.setTitle(boardName);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -167,6 +209,7 @@ public class MyBoardActivity extends ShareBoardActivity {
                 try {
                     auth = wantedAuth.getJSONObject(0);
                     currUserAuth = Globals.userAuthType.fromOrdinal(auth.getInt("PermissionCode"));
+                    invalidateOptionsMenu();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -199,11 +242,18 @@ public class MyBoardActivity extends ShareBoardActivity {
                         String adTitle = ad.getString("Title");
                         Globals.adPriority AdPriority = Globals.adPriority.fromOrdinal(ad.getInt("Priority"));
                         String adDescription = ad.getString("Desctiption");
-                        //Date fromDate = ad.getString("FromDate");
-                        //Date toDate = ad.getString("ToDate");
+                        String fromDate =
+                                Integer.parseInt(ad.getString("FromDate").substring(8,10)) + "/" +
+                                Integer.parseInt(ad.getString("FromDate").substring(5,7)) + "/" +
+                                ad.getString("FromDate").substring(0,4);
+                        String toDate =
+                                Integer.parseInt(ad.getString("ToDate").substring(8,10)) + "/" +
+                                        Integer.parseInt(ad.getString("ToDate").substring(5,7)) + "/" +
+                                        ad.getString("ToDate").substring(0,4);
+//                        String toDate = ad.getString("ToDate");
                         //Date lastUpdate = ad.getString("LastUpdate");
                         Integer lastUpdatedBy = ad.getInt("LastUpdateBy");
-                        Ad adToAdd = new Ad(adId, boardId, userId, AdType, adTitle, AdPriority, adDescription, null, null, null, null, lastUpdatedBy);
+                        Ad adToAdd = new Ad(adId, boardId, userId, AdType, adTitle, AdPriority, adDescription, null, fromDate, toDate, null, lastUpdatedBy);
 
                         currBoardAds.add(adToAdd);
                     } catch (JSONException e) {
@@ -257,7 +307,7 @@ public class MyBoardActivity extends ShareBoardActivity {
         int smallNotesCount = 0;
 
         if (currBoardAds.size() == 0) {
-            emptyBoardText.setVisibility(View.VISIBLE);
+            //emptyBoardText.setVisibility(View.VISIBLE);
         } else {
 
             for (Ad ad : currBoardAds) {

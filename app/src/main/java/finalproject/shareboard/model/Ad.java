@@ -13,8 +13,8 @@ public class Ad {
     private String AdTitle;
     private Globals.adPriority AdPriority;
     private String AdDesc;
-    private Date fromTime;
-    private Date toTime;
+    private String fromTime;
+    private String toTime;
     private Date lastUpdate;
     private Integer lastUpdateBy;
 
@@ -82,19 +82,19 @@ public class Ad {
         AdDesc = adDesc;
     }
 
-    public Date getFromTime() {
+    public String getFromTime() {
         return fromTime;
     }
 
-    public void setFromTime(Date fromTime) {
+    public void setFromTime(String fromTime) {
         this.fromTime = fromTime;
     }
 
-    public Date getToTime() {
+    public String getToTime() {
         return toTime;
     }
 
-    public void setToTime(Date toTime) {
+    public void setToTime(String toTime) {
         this.toTime = toTime;
     }
 
@@ -114,7 +114,7 @@ public class Ad {
         this.lastUpdateBy = lastUpdateBy;
     }
 
-    public Ad(Integer adId, Integer boardId, Integer userId, Globals.adType adType, String adTitle, Globals.adPriority adPriority, String adDesc, Date createTime, Date fromTime, Date toTime, Date lastUpdate, Integer lastUpdateBy) {
+    public Ad(Integer adId, Integer boardId, Integer userId, Globals.adType adType, String adTitle, Globals.adPriority adPriority, String adDesc, Date createTime, String fromTime, String toTime, Date lastUpdate, Integer lastUpdateBy) {
         AdId = adId;
         BoardId = boardId;
         UserId = userId;

@@ -1,7 +1,10 @@
 package finalproject.shareboard;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +19,12 @@ import finalproject.shareboard.framework.ApiConnector;
 
 
 public class MainMenuActivity extends ShareBoardActivity {
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor prefEdit;
+
+    Dialog registerUserDialog;
+    Dialog adValidDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,10 +32,16 @@ public class MainMenuActivity extends ShareBoardActivity {
 
         InitializeComponents();
 
-        if (((ShareBoardApplication)getApplication()).getUserID() == "") {
+        preferences =
+                getSharedPreferences("ShareBoard",MODE_PRIVATE);
+        prefEdit = preferences.edit();
+        prefEdit.clear().apply();
+        ((ShareBoardApplication)getApplication()).setUserID(preferences.getInt("UserID", 0));
+
+        if (((ShareBoardApplication)getApplication()).getUserID() == 0) {
             initalizeRegisterUserDialog();
         }
-//        dialog.show();
+//         dialog.show();
 //        new GetAllUsers().execute(new ApiConnector());
     }
 
@@ -51,6 +66,18 @@ public class MainMenuActivity extends ShareBoardActivity {
                 OpenMyBoardsActivity();
             }
         });
+
+        AlertDialog.Builder adValidDialogBuilder = new AlertDialog.Builder(this);
+        adValidDialogBuilder.setMessage("Oops! Something went wrong... Please try correct your details or try again later")
+                .setCancelable(false)
+                .setNeutralButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        adValidDialog = adValidDialogBuilder.create();
     }
 
     private void OpenMyBoardsActivity() {
@@ -59,7 +86,7 @@ public class MainMenuActivity extends ShareBoardActivity {
     }
 
     private void initalizeRegisterUserDialog() {
-        final Dialog registerUserDialog = new Dialog(MainMenuActivity.this);
+        registerUserDialog = new Dialog(MainMenuActivity.this);
         registerUserDialog.setContentView(R.layout.register_user);
         registerUserDialog.setTitle("Registration");
 
@@ -70,7 +97,6 @@ public class MainMenuActivity extends ShareBoardActivity {
             public void onClick(View v) {
                 Integer UserID = Integer.parseInt(registerUserInput.getText().toString());
                 registerNewUser(UserID);
-                registerUserDialog.dismiss();
             }
         });
 
@@ -114,7 +140,7 @@ public class MainMenuActivity extends ShareBoardActivity {
         }
     }
 
-    private class insertNewUser extends AsyncTask<ApiConnector, Long, JSONObject> {
+    private class insertNewUser extends AsyncTask<ApiConnector, Long, Integer> {
         private Integer UserId;
 
         protected insertNewUser(Integer UserIDToAdd) {
@@ -124,16 +150,21 @@ public class MainMenuActivity extends ShareBoardActivity {
 
         @Override
 
-        protected JSONObject doInBackground(ApiConnector... apiConnectors) {
+        protected Integer doInBackground(ApiConnector... apiConnectors) {
             return apiConnectors[0].InsertUser(UserId);
         }
 
         @Override
-        protected void onPostExecute(JSONObject jsonArray) {
-            ((ShareBoardApplication)getApplication()).setUserID(UserId.toString());
-            ((EditText)findViewById(R.id.Test)).setText(((ShareBoardApplication)getApplication()).getUserID());
+        protected void onPostExecute(Integer success) {
+            if (success != 0) {
+                ((ShareBoardApplication) getApplication()).setUserID(UserId);
+                ((EditText) findViewById(R.id.Test)).setText(((ShareBoardApplication) getApplication()).getUserID().toString());
+                prefEdit.putInt("UserID", UserId).apply();
+                registerUserDialog.dismiss();
+            } else {
+                adValidDialog.show();
+            }
             dialog.dismiss();
-
         }
     }
 

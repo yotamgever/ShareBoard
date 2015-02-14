@@ -113,7 +113,8 @@
             android:layout_below="@+id/tvAdFromDate"
             android:inputType="datetime"
             android:layout_alignParentLeft="true"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:focusable="false"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -132,7 +133,8 @@
             android:layout_below="@+id/tvAdToDate"
             android:inputType="datetime"
             android:layout_alignParentLeft="true"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:focusable="false"/>
     </LinearLayout>
 
     <LinearLayout android:id="@+id/llAdEditButtons"

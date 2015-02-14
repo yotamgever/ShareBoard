@@ -340,6 +340,7 @@ public class SelectBoardUsersActivity extends ShareBoardActivity {
                 BoardDetails.putInt("BoardID", boardToBeAltered.getBoardID());
                 myBoardActivity.putExtras(BoardDetails);
                 startActivity(myBoardActivity);
+                SelectBoardUsersActivity.this.finish();
             }
             dialog.dismiss();
         }

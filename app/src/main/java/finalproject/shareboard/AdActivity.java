@@ -1,23 +1,23 @@
 package finalproject.shareboard;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Calendar;
+import java.util.Date;
 
 import finalproject.shareboard.framework.ApiConnector;
 import finalproject.shareboard.framework.Globals;
@@ -28,6 +28,12 @@ public class AdActivity extends ShareBoardActivity {
     Integer AdID = null;
     Integer BoardID = null;
     Globals.userAuthType userAuth = null;
+    String adTitle = null;
+    String adDesc = null;
+    Globals.adType AdType = null;
+    Globals.adPriority AdPriority = null;
+    String adFrom = null;
+    String adTo = null;
 
     private TextView tvAdId;
 
@@ -46,10 +52,17 @@ public class AdActivity extends ShareBoardActivity {
     private LinearLayout llEditAdButtons;
 
     AlertDialog adValidDialog;
+    AlertDialog deleteAdDialog;
 
-    Ad adToAdd;
+    DatePickerDialog FromdatePicker;
+    DatePickerDialog TodatePicker;
+
+    Ad adToAddOrUpdate;
 
     boolean bIsAtEditMode = false;
+
+    private Calendar calendar;
+    private int year, month, day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +71,12 @@ public class AdActivity extends ShareBoardActivity {
 
         Bundle extras = getIntent().getExtras();
         AdID = extras.getInt("AdID");
+        adTitle = extras.getString("AdTitle");
+        AdType =  Globals.adType.fromOrdinal(extras.getInt("AdType"));
+        adDesc = extras.getString("AdDesc");
+        AdPriority = Globals.adPriority.fromOrdinal(extras.getInt("AdPriority"));
+        adFrom = extras.getString("AdFromDate");
+        adTo = extras.getString("AdToDate");
         BoardID = extras.getInt("BoardID");
         userAuth = Globals.userAuthType.fromOrdinal(extras.getInt("UserAuth"));
 
@@ -104,10 +123,54 @@ public class AdActivity extends ShareBoardActivity {
             }
         });
 
+        calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog.OnDateSetListener FromDateListener
+                = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker arg0, int year, int month, int day) {
+                etAdFromDate.setText(String.valueOf(day) + "/" + String.valueOf(month + 1)
+                        + "/" +String.valueOf(year));
+            }
+        };
+
+        DatePickerDialog.OnDateSetListener ToDateListener
+                = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker arg0, int year, int month, int day) {
+                etAdToDate.setText(String.valueOf(day) + "/" + String.valueOf(month + 1)
+                        + "/" +String.valueOf(year));
+            }
+        };
+
+        FromdatePicker = new DatePickerDialog(this, FromDateListener, year, month, day);
+        TodatePicker = new DatePickerDialog(this, ToDateListener, year, month, day);
+
+        etAdFromDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FromdatePicker.show();
+            }
+        });
+
+        etAdToDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TodatePicker.show();
+            }
+        });
+
         btnAdSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                insertUpdateAd();
+                if (AdID != null && AdID != 0) {
+                    insertUpdateAd(true);
+                } else {
+                    insertUpdateAd(false);
+                }
             }
         });
 
@@ -120,7 +183,12 @@ public class AdActivity extends ShareBoardActivity {
 
         if (AdID != null && AdID != 0) {
             tvAdId.setText(getResources().getText(R.string.ad_id_text) + " " + AdID.toString());
-            setAdForInsertOrUpdate(true);
+            spAdType.setSelection(AdType.ordinal());
+            etAdTitle.setText(adTitle);
+            spAdPriority.setSelection(AdPriority.ordinal());
+            etAdDesc.setText(adDesc);
+            etAdFromDate.setText(adFrom);
+            etAdToDate.setText(adTo);
         } else {
             setAdForInsertOrUpdate(false);
             tvAdId.setVisibility(View.INVISIBLE);
@@ -138,10 +206,29 @@ public class AdActivity extends ShareBoardActivity {
                         });
 
         adValidDialog = adValidDialogBuilder.create();
+
+        AlertDialog.Builder deleteAdDialogBuilder = new AlertDialog.Builder(this);
+        deleteAdDialogBuilder.setMessage("Are you sure you want to delete this ad?")
+                .setCancelable(false)
+                .setPositiveButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int id) {
+                                dialogInterface.cancel();
+                            }
+                        })
+                .setNegativeButton("Yes", new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int id) {
+                                dialog.show();
+                                new DeleteAd().execute(new ApiConnector());
+                            }
+                        });
+
+        deleteAdDialog = deleteAdDialogBuilder.create();
     }
 
     private void cancelEditAd() {
-
+        backButtonPressedDialog.show();
     }
 
     private void setAdForInsertOrUpdate(boolean isEdit) {
@@ -154,23 +241,27 @@ public class AdActivity extends ShareBoardActivity {
         etAdDesc.setEnabled(true);
         etAdFromDate.setEnabled(true);
         etAdToDate.setEnabled(true);
+        llEditAdButtons.setVisibility(View.VISIBLE);
     }
 
-    private void insertUpdateAd() {
+    private void insertUpdateAd(boolean isEdit) {
         if (checkAdValidity()) {
             Integer UserId = ((ShareBoardApplication)getApplication()).getCurrUser().getUserId();
             Globals.adType AdType = Globals.adType.fromOrdinal(spAdType.getSelectedItemPosition());
             String AdTitle = etAdTitle.getText().toString();
             Globals.adPriority AdPriority = Globals.adPriority.fromOrdinal(spAdPriority.getSelectedItemPosition());
             String AdDesc = etAdDesc.getText().toString();
+            String FromDate = etAdFromDate.getText().toString();
+            String ToDate = etAdToDate.getText().toString();
 
-            adToAdd = new Ad(AdID, BoardID, UserId, AdType, AdTitle, AdPriority, AdDesc, null, null, null, null, UserId);
+            adToAddOrUpdate = new Ad(AdID, BoardID, UserId, AdType, AdTitle, AdPriority, AdDesc, null, FromDate,ToDate, null, UserId);
 
             if ((AdID == null) || (AdID == 0)) {
                 dialog.show();
                 new InsertAd().execute(new ApiConnector());
             } else {
-
+                dialog.show();
+                new UpdateAd().execute(new ApiConnector());
             }
         } else {
             adValidDialog.show();
@@ -178,15 +269,15 @@ public class AdActivity extends ShareBoardActivity {
     }
 
     private boolean checkAdValidity() {
-        if (etAdTitle.getText().toString() == "") {
+        if (etAdTitle.getText().toString().length() == 0) {
             return false;
         }
 
         if ((spAdType.getSelectedItemPosition() == Globals.adType.General.ordinal()) &&
-                etAdDesc.getText().toString() == "") {
+                etAdDesc.getText().toString().length() == 0) {
             return false;
         } else if ((spAdType.getSelectedItemPosition() == Globals.adType.Event.ordinal() &&
-                ((etAdFromDate.getText().toString() == "") || (etAdToDate.getText().toString() == "")))) {
+                ((etAdFromDate.getText().toString().length() == 0) || (etAdToDate.getText().toString().length() == 0)))) {
             return false;
         }
 
@@ -199,19 +290,21 @@ public class AdActivity extends ShareBoardActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_ad, menu);
 
-        if (Globals.userAuthType.Admin.compareTo(userAuth) == 0) {
-            if (!bIsAtEditMode) {
-                menu.findItem(R.id.itmEditAd).setVisible(true);
-                menu.findItem(R.id.itmDeleteAd).setVisible(true);
-            } else {
-                menu.findItem(R.id.itmEditAd).setVisible(false);
-                menu.findItem(R.id.itmDeleteAd).setVisible(false);
-            }
-        } else if (Globals.userAuthType.Edit.compareTo(userAuth) == 0) {
-            if (!bIsAtEditMode) {
-                menu.findItem(R.id.itmEditAd).setVisible(true);
-            } else {
-                menu.findItem(R.id.itmEditAd).setVisible(false);
+        if (AdID != null && AdID != 0) {
+            if (Globals.userAuthType.Admin.compareTo(userAuth) == 0) {
+                if (!bIsAtEditMode) {
+                    menu.findItem(R.id.itmEditAd).setVisible(true);
+                    menu.findItem(R.id.itmDeleteAd).setVisible(true);
+                } else {
+                    menu.findItem(R.id.itmEditAd).setVisible(false);
+                    menu.findItem(R.id.itmDeleteAd).setVisible(false);
+                }
+            } else if (Globals.userAuthType.Edit.compareTo(userAuth) == 0) {
+                if (!bIsAtEditMode) {
+                    menu.findItem(R.id.itmEditAd).setVisible(true);
+                } else {
+                    menu.findItem(R.id.itmEditAd).setVisible(false);
+                }
             }
         }
 
@@ -229,7 +322,11 @@ public class AdActivity extends ShareBoardActivity {
         if (id == R.id.itmEditAd) {
             llEditAdButtons.setVisibility(View.VISIBLE);
             bIsAtEditMode = true;
+            setAdForInsertOrUpdate(true);
+            invalidateOptionsMenu();
             return true;
+        } else if (id == R.id.itmDeleteAd) {
+            deleteAdDialog.show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -238,7 +335,7 @@ public class AdActivity extends ShareBoardActivity {
     private class InsertAd extends AsyncTask<ApiConnector, Long, Integer> {
         @Override
         protected Integer doInBackground(ApiConnector... apiConnectors) {
-            return apiConnectors[0].InsertAd(adToAdd);
+            return apiConnectors[0].InsertAd(adToAddOrUpdate);
         }
 
         @Override
@@ -247,6 +344,36 @@ public class AdActivity extends ShareBoardActivity {
 
             dialog.dismiss();
             finish();
+        }
+    }
+
+    private class DeleteAd extends AsyncTask<ApiConnector, Long, Integer> {
+        @Override
+        protected Integer doInBackground(ApiConnector... apiConnectors) {
+            return apiConnectors[0].DeleteAd(AdID);
+        }
+
+        @Override
+        protected void onPostExecute(Integer success) {
+            if(success == 1) {
+                dialog.dismiss();
+                finish();
+            }
+        }
+    }
+
+    private class UpdateAd extends AsyncTask<ApiConnector, Long, Integer> {
+        @Override
+        protected Integer doInBackground(ApiConnector... apiConnectors) {
+            return apiConnectors[0].UpdateAd(adToAddOrUpdate);
+        }
+
+        @Override
+        protected void onPostExecute(Integer success) {
+            if(success == 1) {
+                dialog.dismiss();
+                finish();
+            }
         }
     }
 }

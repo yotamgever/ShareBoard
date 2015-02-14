@@ -36,6 +36,8 @@ public class ApiConnector {
     String insertBoardScript = "http://shareboardapp.comuf.com/InsertBoard.php";
     String insertAdScript = "http://shareboardapp.comuf.com/InsertAd.php";
     String insertUsersToBoardScript = "http://shareboardapp.comuf.com/InsertUsersToBoard.php";
+    String deleteAdScript = "http://shareboardapp.comuf.com/deleteAd.php";
+    String updateAdScript = "http://shareboardapp.comuf.com/updateAd.php";
 
     // Create a new HttpClient and Post Header
     DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -75,7 +77,7 @@ public class ApiConnector {
         return allUsers;
     }
 
-    public JSONObject InsertUser(Integer UserID) {
+    public Integer InsertUser(Integer UserID) {
 
         HttpPost httppost = new HttpPost(insertUserScript);
 
@@ -99,6 +101,7 @@ public class ApiConnector {
         }
 
         JSONObject success = null;
+        Integer Success = 0;
 
         if (httpEntity != null) {
             try {
@@ -107,13 +110,15 @@ public class ApiConnector {
                 Log.e("Entity Response: ", entityResponse);
 
                 success = new JSONObject(entityResponse);
+
+                Success = success.getInt("Success");
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return success;
+        return Success;
     }
 
     public Integer InsertBoard(Board boardToAdd) {
@@ -401,8 +406,25 @@ public class ApiConnector {
             nameValuePairs.add(new BasicNameValuePair("AdTitle", adToAdd.getAdTitle()));
             nameValuePairs.add(new BasicNameValuePair("AdPriority", String.valueOf(adToAdd.getAdPriority().ordinal())));
             nameValuePairs.add(new BasicNameValuePair("AdDesc", adToAdd.getAdDesc()));
-            nameValuePairs.add(new BasicNameValuePair("AdFromDate", null));
-            nameValuePairs.add(new BasicNameValuePair("AdToDate", null));
+
+            if (Globals.adType.Event.compareTo(adToAdd.getAdType()) == 0) {
+                String newFromDate = adToAdd.getFromTime().split("/")[2] +
+                        "-" + (Integer.parseInt(adToAdd.getFromTime().split("/")[1]) < 10 ?
+                        "0" : "") + adToAdd.getFromTime().split("/")[1] +
+                        "-" + (Integer.parseInt(adToAdd.getFromTime().split("/")[0]) < 10 ?
+                        "0" : "") + adToAdd.getFromTime().split("/")[0];
+                String newToDate = adToAdd.getToTime().split("/")[2] +
+                        "-" + (Integer.parseInt(adToAdd.getToTime().split("/")[1]) < 10 ?
+                        "0" : "") + adToAdd.getToTime().split("/")[1] +
+                        "-" + (Integer.parseInt(adToAdd.getToTime().split("/")[0]) < 10 ?
+                        "0" : "") + adToAdd.getToTime().split("/")[0];
+                nameValuePairs.add(new BasicNameValuePair("AdFromDate", newFromDate));
+                nameValuePairs.add(new BasicNameValuePair("AdToDate", newToDate));
+            } else {
+                nameValuePairs.add(new BasicNameValuePair("AdFromDate", null));
+                nameValuePairs.add(new BasicNameValuePair("AdToDate", null));
+            }
+
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             // Execute HTTP Post Request
@@ -435,5 +457,115 @@ public class ApiConnector {
             }
         }
         return AdID;
+    }
+
+    public Integer DeleteAd(Integer adID) {
+
+        HttpPost httppost = new HttpPost(deleteAdScript);
+
+        HttpEntity httpEntity = null;
+
+        try {
+            // Add your data
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair("AdID", adID.toString()));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpClient.execute(httppost);
+
+            httpEntity = response.getEntity();
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject success = null;
+        Integer AdDeleted = 0;
+
+        if (httpEntity != null) {
+            try {
+                String entityResponse = EntityUtils.toString(httpEntity);
+
+                Log.e("Entity Response: ", entityResponse);
+
+                success = new JSONObject(entityResponse);
+
+                AdDeleted = success.getInt("Success");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return AdDeleted;
+    }
+
+    public Integer UpdateAd(Ad adToUpdate) {
+
+        HttpPost httppost = new HttpPost(updateAdScript);
+
+        HttpEntity httpEntity = null;
+
+        try {
+            // Add your data
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair("AdID", adToUpdate.getAdId().toString()));
+            nameValuePairs.add(new BasicNameValuePair("UserID", adToUpdate.getUserId().toString()));
+            nameValuePairs.add(new BasicNameValuePair("AdTitle", adToUpdate.getAdTitle()));
+            nameValuePairs.add(new BasicNameValuePair("AdDesc", adToUpdate.getAdDesc()));
+
+            if (Globals.adType.Event.compareTo(adToUpdate.getAdType()) == 0) {
+                String newFromDate = adToUpdate.getFromTime().split("/")[2] +
+                        "-" + (Integer.parseInt(adToUpdate.getFromTime().split("/")[1]) < 10 ?
+                        "0" : "") + adToUpdate.getFromTime().split("/")[1] +
+                        "-" + (Integer.parseInt(adToUpdate.getFromTime().split("/")[0]) < 10 ?
+                        "0" : "") + adToUpdate.getFromTime().split("/")[0];
+                String newToDate = adToUpdate.getToTime().split("/")[2] +
+                        "-" + (Integer.parseInt(adToUpdate.getToTime().split("/")[1]) < 10 ?
+                        "0" : "") + adToUpdate.getToTime().split("/")[1] +
+                        "-" + (Integer.parseInt(adToUpdate.getToTime().split("/")[0]) < 10 ?
+                        "0" : "") + adToUpdate.getToTime().split("/")[0];
+                nameValuePairs.add(new BasicNameValuePair("AdFromDate", newFromDate));
+                nameValuePairs.add(new BasicNameValuePair("AdToDate", newToDate));
+            } else {
+                nameValuePairs.add(new BasicNameValuePair("AdFromDate", null));
+                nameValuePairs.add(new BasicNameValuePair("AdToDate", null));
+            }
+
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpClient.execute(httppost);
+
+            httpEntity = response.getEntity();
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject success = null;
+        Integer adUpdated = 0;
+
+        if (httpEntity != null) {
+            try {
+                String entityResponse = EntityUtils.toString(httpEntity);
+
+                Log.e("Entity Response: ", entityResponse);
+
+                success = new JSONObject(entityResponse);
+
+                adUpdated = success.getInt("Success");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return adUpdated;
     }
 }
