@@ -6,4 +6,7 @@
        android:icon="@drawable/add_ad" android:showAsAction="always"
         tools:ignore="AppCompatResource" android:visible="false">
     </item>
+    <item android:id="@+id/refresh_board" android:title="@string/menu_item_refresh_boards"
+        android:showAsAction="always" android:icon="@drawable/refresh_icon"
+        tools:ignore="AppCompatResource" />
 </menu>

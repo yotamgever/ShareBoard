@@ -163,6 +163,8 @@ public class MyBoardActivity extends ShareBoardActivity {
             adActivity.putExtras(extras);
             startActivity(adActivity);
             return true;
+        } else if (id == R.id.refresh_board) {
+            onResume();
         }
 
         return super.onOptionsItemSelected(item);

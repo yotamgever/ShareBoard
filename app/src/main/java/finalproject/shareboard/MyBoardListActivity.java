@@ -127,6 +127,8 @@ public class MyBoardListActivity extends ShareBoardActivity {
             Intent AddCreateActivity = new Intent(this, CreateBoardActivity.class);
             startActivity(AddCreateActivity);
             return true;
+        } else if (id == R.id.refresh_boards) {
+            onResume();
         }
 
         return super.onOptionsItemSelected(item);

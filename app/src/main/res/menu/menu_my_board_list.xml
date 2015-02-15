@@ -5,4 +5,7 @@
     <item android:id="@+id/add_new_board" android:title="@string/menu_item_add_board_text"
         android:showAsAction="always" android:icon="@drawable/add_ad"
         tools:ignore="AppCompatResource" />
+    <item android:id="@+id/refresh_boards" android:title="@string/menu_item_refresh_boards"
+        android:showAsAction="always" android:icon="@drawable/refresh_icon"
+        tools:ignore="AppCompatResource" />
 </menu>
