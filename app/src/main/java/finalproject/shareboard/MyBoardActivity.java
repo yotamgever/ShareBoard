@@ -195,6 +195,8 @@ public class MyBoardActivity extends ShareBoardActivity {
                     new GetUserBoardAuth().execute(new ApiConnector());
                 }
 
+            } else {
+                dialog.dismiss();
             }
         }
     }
