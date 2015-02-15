@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/ad_id_text"/>
+        android:text="@string/ad_id_text"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -87,8 +88,9 @@
             android:lines="7"
             android:maxLines="7"
             android:layout_below="@+id/tvAdDesc"
-            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_=+:()]["
-            android:enabled="false"/>
+            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_=+:()][\n\r"
+            android:enabled="false"
+            android:gravity="top" />
     </LinearLayout>
     <LinearLayout android:id="@+id/llEventAdSection"
         android:layout_width="fill_parent"
@@ -142,13 +144,17 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_marginBottom="0px"
+        android:gravity="bottom">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save_button"
             android:id="@+id/btnAdSave"
             android:layout_alignTop="@+id/btnAdCancel"
+            android:background="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"
             />
 
         <Button
@@ -156,8 +162,8 @@
             android:layout_height="wrap_content"
             android:text="@string/cancel_button"
             android:id="@+id/btnAdCancel"
-            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/btnAdSave"
+            android:background="@android:color/darker_gray"
             android:layout_centerHorizontal="true" />
     </LinearLayout>
 

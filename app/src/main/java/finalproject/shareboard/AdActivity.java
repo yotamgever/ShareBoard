@@ -146,7 +146,16 @@ public class AdActivity extends ShareBoardActivity {
             }
         };
 
-        FromdatePicker = new DatePickerDialog(this, FromDateListener, year, month, day);
+        if (this.adToAddOrUpdate == null || this.adToAddOrUpdate.getFromTime() == null) {
+            FromdatePicker = new DatePickerDialog(this, FromDateListener, year, month, day);
+        }
+        else {
+            Integer fromYear = Integer.parseInt(this.adToAddOrUpdate.getFromTime().split("/")[2]);
+            Integer fromMonth = Integer.parseInt(this.adToAddOrUpdate.getFromTime().split("/")[1]) - 1;
+            Integer fromDay = Integer.parseInt(this.adToAddOrUpdate.getFromTime().split("/")[0]);
+            FromdatePicker = new DatePickerDialog(this, FromDateListener, fromYear, fromMonth, fromDay);
+        }
+
         TodatePicker = new DatePickerDialog(this, ToDateListener, year, month, day);
 
         etAdFromDate.setOnClickListener(new View.OnClickListener() {
