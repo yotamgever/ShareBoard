@@ -6,7 +6,7 @@
     <string name="create_board_select_users_title_text">Select Users For ShareBoard - </string>
     <string name="add_contact_button_text">Add Contact</string>
     <string name="max_users_per_board_text">You have reached the maximum number of users per board</string>
-    <string name="create_board_text">Create Shreboard!</string>
+    <string name="create_board_text">Create Shareboard!</string>
     <string-array name="user_auth_types">
         <item>Display</item>
         <item>Edit</item>

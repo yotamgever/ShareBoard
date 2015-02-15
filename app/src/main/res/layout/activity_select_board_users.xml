@@ -258,6 +258,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btnCreateBoard"
             android:text="@string/create_board_text"
+            android:background="@android:color/holo_blue_dark"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 
