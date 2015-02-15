@@ -30,7 +30,6 @@
         android:id="@+id/Test"
         android:layout_above="@+id/btn_add_ad"
         android:layout_alignLeft="@+id/btnCreate"
-        android:layout_alignStart="@+id/btnCreate"
         android:layout_marginBottom="68dp" />
 
     <Button
@@ -39,6 +38,5 @@
         android:text="MyBoards"
         android:id="@+id/myBoards"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/Test"
-        android:layout_alignStart="@+id/Test" />
+        android:layout_alignLeft="@+id/Test" />
 </RelativeLayout>

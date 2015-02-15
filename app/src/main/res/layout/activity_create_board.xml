@@ -81,8 +81,6 @@
         android:id="@+id/etBoardName"
         android:maxEms="25"
         android:layout_below="@+id/llBoardType"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:hint="@string/choose_board_name"
         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_=+:()]["/>
 
@@ -93,7 +91,6 @@
         android:id="@+id/btnCreateBoardNext"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginLeft="58dp"
         />
 
@@ -103,7 +100,6 @@
         android:text="@string/cancel_button"
         android:id="@+id/btnCreateBoardCancel"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/tvStyleBoard"
-        android:layout_toEndOf="@+id/tvStyleBoard" />
+        android:layout_toRightOf="@+id/tvStyleBoard" />
 
 </RelativeLayout>
