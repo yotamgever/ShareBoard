@@ -178,23 +178,24 @@ public class MyBoardActivity extends ShareBoardActivity {
 
         @Override
         protected void onPostExecute(JSONArray wantedBoard) {
-            if (wantedBoard.length() == 1) {
-                JSONObject board = null;
-                try {
-                    board = wantedBoard.getJSONObject(0);
-                    String boardName = board.getString("BoardName");
-                    Globals.boardTypes boardType = Globals.boardTypes.fromOrdinal(board.getInt("BoardType"));
-                    User creator = new User(board.getInt("CreatorID"));
-                    currBoard = new Board(boardID, boardName, creator, boardType);
-                    MyBoardActivity.this.setTitle(boardName);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            if (wantedBoard != null) {
+                if (wantedBoard.length() == 1) {
+                    JSONObject board = null;
+                    try {
+                        board = wantedBoard.getJSONObject(0);
+                        String boardName = board.getString("BoardName");
+                        Globals.boardTypes boardType = Globals.boardTypes.fromOrdinal(board.getInt("BoardType"));
+                        User creator = new User(board.getInt("CreatorID"));
+                        currBoard = new Board(boardID, boardName, creator, boardType);
+                        MyBoardActivity.this.setTitle(boardName);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    new GetUserBoardAuth().execute(new ApiConnector());
                 }
 
-                new GetUserBoardAuth().execute(new ApiConnector());
             }
-
-
         }
     }
 

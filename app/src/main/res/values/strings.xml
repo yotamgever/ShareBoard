@@ -15,6 +15,6 @@
     <string name="title_activity_create_board">Create Board</string>
     <string name="title_activity_select_board_users">Select Board Users</string>
     <string name="title_activity_my_board">MyBoardActivity</string>
-    <string name="title_activity_my_board_list">Share Board</string>
+    <string name="title_activity_my_board_list">ShareBoard</string>
 
 </resources>

@@ -96,8 +96,6 @@ public class MyBoardListActivity extends ShareBoardActivity {
     private void initializeComponents() {
         lstMyBoardsListView = (ListView) findViewById(R.id.lstMyBoardsList);
 
-
-
         loadMyBoardsList();
     }
 
