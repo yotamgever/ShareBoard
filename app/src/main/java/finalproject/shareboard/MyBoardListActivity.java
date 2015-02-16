@@ -49,6 +49,7 @@ public class MyBoardListActivity extends ShareBoardActivity {
         preferences =
                 getSharedPreferences("ShareBoard",MODE_PRIVATE);
         prefEdit = preferences.edit();
+        prefEdit.clear().apply();
         ((ShareBoardApplication)getApplication()).setUserID(preferences.getInt("UserID", 0));
 
         if (((ShareBoardApplication)getApplication()).getUserID() == 0) {
